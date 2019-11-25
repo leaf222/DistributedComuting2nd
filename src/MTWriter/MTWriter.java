@@ -1,3 +1,7 @@
+package MTWriter;
+
+import Producer.Producer;
+
 import java.io.IOException;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
