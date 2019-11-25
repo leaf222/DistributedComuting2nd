@@ -1,9 +1,6 @@
 package MTWriter;
 
-import java.io.BufferedOutputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.zip.CheckedInputStream;
 
 /**
@@ -29,30 +26,13 @@ public class BufferedMTWriter extends MTWriter
     {
         try
         {
-            PrintThePipe();
+            PrintThePipe(outputStream);
             outputStream.flush();
             outputStream.close();
         } catch (IOException e)
         {
             e.printStackTrace();
         }
-
     }
 
-    public void PrintThePipe() throws IOException
-    {
-        byte[] buf = new byte[1024];
-        int len = -1;
-        while ((len = super.getPipedInputStream().read(buf)) != -1)
-        {
-            try
-            {
-                String s = new String(buf,0,len);
-                outputStream.write(buf, 0, len);
-            }catch (IOException e)
-            {
-                e.printStackTrace();
-            }
-        }
-    }
 }

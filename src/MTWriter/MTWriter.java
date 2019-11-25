@@ -35,6 +35,21 @@ public abstract class MTWriter extends Thread
         }
     }
 
-    public abstract void PrintThePipe() throws IOException;
+    public void PrintThePipe(OutputStream outputStream) throws IOException
+    {
+        byte[] buf = new byte[1024];
+        int len = -1;
+        while ((len = pipedInputStream.read(buf)) != -1)
+        {
+            try
+            {
+                String s = new String(buf,0,len);
+                outputStream.write(buf, 0, len);
+            }catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
+    }
 
 }
