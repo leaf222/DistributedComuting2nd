@@ -1,9 +1,6 @@
 package MTWriter;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 
 /**
  * @program: DistributedComuting2nd
@@ -16,8 +13,9 @@ public class OutputStreamMTWriter extends MTWriter
     private OutputStream outputStream = null;
     private static String FILE_PATH = "E:/Code/IntelJ/DistributedComuting2nd/OutputStreamIOLog.txt";
 
-    public OutputStreamMTWriter() throws FileNotFoundException
+    public OutputStreamMTWriter(PipedInputStream pipedInputStream) throws FileNotFoundException
     {
+        super(pipedInputStream);
         super.createFile(FILE_PATH);
         outputStream = new FileOutputStream(FILE_PATH);
     }

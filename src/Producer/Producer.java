@@ -34,7 +34,7 @@ public class Producer extends Thread
 
     public void writeToPipe() throws IOException
     {
-        for(int i = 1; i <= 10; i++)
+        for(int i = 1; i <= 20; i++)
         {
             writeNumberToPipe(i);
         }

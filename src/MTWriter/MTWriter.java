@@ -12,7 +12,12 @@ import java.io.*;
  **/
 public abstract class MTWriter extends Thread
 {
-    private PipedInputStream pipedInputStream = new PipedInputStream();
+    private PipedInputStream pipedInputStream = null;
+
+    public MTWriter(PipedInputStream p)
+    {
+        pipedInputStream = p;
+    }
 
     public PipedInputStream getPipedInputStream()
     {
