@@ -10,19 +10,19 @@ import java.io.*;
  * @author: Yifan Ye
  * @create: 2019/11/25
  **/
-public class MTWriter extends Thread
+public abstract class MTWriter extends Thread
 {
     private PipedInputStream pipedInputStream = new PipedInputStream();
-    protected static String FILE_PATH = "E:/Code/IntelJ/DistributedComuting2nd/log.txt";
 
     public PipedInputStream getPipedInputStream()
     {
         return  pipedInputStream;
     }
 
-    public void createFile() throws FileNotFoundException
+    //检查文件是否存在，如不存在，则创建
+    public void createFile(String path) throws FileNotFoundException
     {
-        File file = new File(FILE_PATH);
+        File file = new File(path);
         if(!file.exists())
         {
             try
@@ -35,6 +35,6 @@ public class MTWriter extends Thread
         }
     }
 
-    public void PrintThePipe() throws IOException{}
+    public abstract void PrintThePipe() throws IOException;
 
 }

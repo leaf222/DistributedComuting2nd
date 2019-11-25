@@ -1,3 +1,11 @@
+import MTWriter.*;
+import Producer.*;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PipedInputStream;
+import java.io.PipedOutputStream;
+
 /**
  * @program: DistributedComuting2nd
  * @description: Test.
@@ -12,10 +20,25 @@ public class test extends Thread
         System.out.println("111");
     }
 
-    public static void main(String[] args)
+    public static void main(String[] args) throws FileNotFoundException
     {
+        Producer producer = new Producer();
+        MTWriter mtWriter = new BufferedMTWriter();
 
-        test test = new test();
-        test.start();
+        PipedOutputStream outputStream = producer.getPipedOutputStream();
+        PipedInputStream inputStream = mtWriter.getPipedInputStream();
+
+        try
+        {
+            outputStream.connect(inputStream);
+
+            producer.start();
+            mtWriter.start();
+
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
     }
 }

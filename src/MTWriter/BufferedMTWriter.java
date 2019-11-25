@@ -16,10 +16,11 @@ public class BufferedMTWriter extends MTWriter
 {
     private BufferedOutputStream outputStream = null;
 
-    @Override
-    public void createFile() throws FileNotFoundException
+    private static String FILE_PATH = "E:/Code/IntelJ/DistributedComuting2nd/BufferedIOLog.txt";
+
+    public BufferedMTWriter() throws FileNotFoundException
     {
-        super.createFile();
+        super.createFile(FILE_PATH);
         outputStream = new BufferedOutputStream(new FileOutputStream(FILE_PATH));
     }
 
