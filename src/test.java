@@ -23,7 +23,7 @@ public class test extends Thread
     public static void main(String[] args) throws FileNotFoundException
     {
         Producer producer = new Producer();
-        MTWriter mtWriter = new BufferedMTWriter();
+        MTWriter mtWriter = new PrintWriterMTWriter();
 
         PipedOutputStream outputStream = producer.getPipedOutputStream();
         PipedInputStream inputStream = mtWriter.getPipedInputStream();
