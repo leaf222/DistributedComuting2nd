@@ -4,13 +4,18 @@
  * @author: Yifan Ye
  * @create: 2019/11/25
  **/
-public class test
+public class test extends Thread
 {
-    public static void main(String[] args) {
-        byte[] buf = new byte[100];
-        if(buf[0] == '0')
-        {
-            System.out.println("!!!");
-        }
+    @Override
+    public void run()
+    {
+        System.out.println("111");
+    }
+
+    public static void main(String[] args)
+    {
+
+        test test = new test();
+        test.start();
     }
 }

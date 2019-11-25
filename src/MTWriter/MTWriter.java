@@ -2,9 +2,7 @@ package MTWriter;
 
 import Producer.Producer;
 
-import java.io.IOException;
-import java.io.PipedInputStream;
-import java.io.PipedOutputStream;
+import java.io.*;
 
 /**
  * @program: DistributedComuting2nd
@@ -15,33 +13,21 @@ import java.io.PipedOutputStream;
 public class MTWriter extends Thread
 {
     private PipedInputStream pipedInputStream = new PipedInputStream();
-    private static String FILE_PATH = "E:/Code/IntelJ/DistributedComuting2nd/log.txt";
+    protected static String FILE_PATH = "E:/Code/IntelJ/DistributedComuting2nd/log.txt";
 
     public PipedInputStream getPipedInputStream()
     {
         return  pipedInputStream;
     }
 
-    @Override
-    public void run()
+    public void createFile() throws FileNotFoundException
     {
-        PrintThePipe();
-    }
-
-    public void PrintThePipe()
-    {
-        int total=0;
-        while (true)
+        File file = new File(FILE_PATH);
+        if(!file.exists())
         {
-            byte[] buf = new byte[1024];
             try
             {
-                int len = pipedInputStream.read(buf);
-                total += len;
-                if(len == -1) break;
-                String s = new String(buf,0,len);
-                System.out.println(s);
-
+                file.createNewFile();
             }catch (IOException e)
             {
                 e.printStackTrace();
@@ -49,24 +35,6 @@ public class MTWriter extends Thread
         }
     }
 
-    public static void main(String[] args)
-    {
-        Producer producer = new Producer();
-        MTWriter mtWriter = new MTWriter();
-        PipedInputStream in = mtWriter.getPipedInputStream();
-        PipedOutputStream out = producer.getPipedOutputStream();
-
-        try
-        {
-            in.connect(out);
-
-            producer.start();
-            mtWriter.start();
-
-        }catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-    }
+    public void PrintThePipe() throws IOException{}
 
 }
