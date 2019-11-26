@@ -1,6 +1,8 @@
 package MTWriter;
 
 import java.io.*;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.CountDownLatch;
 
 /**
  * @program: DistributedComuting2nd
@@ -11,13 +13,13 @@ import java.io.*;
 public class OutputStreamMTWriter extends MTWriter
 {
     private OutputStream outputStream = null;
-    private static String FILE_PATH = "E:/Code/IntelJ/DistributedComuting2nd/OutputStreamIOLog.txt";
+    private static String FILE_PATH = "E:/Code/OutputStreamIOLog.txt";
 
-    public OutputStreamMTWriter(PipedInputStream pipedInputStream) throws FileNotFoundException
+    public OutputStreamMTWriter(CountDownLatch c1, CountDownLatch c2, ConcurrentLinkedQueue<String> q) throws FileNotFoundException
     {
-        super(pipedInputStream);
+        super(c1,c2,q);
         super.createFile(FILE_PATH);
-        outputStream = new FileOutputStream(FILE_PATH);
+        outputStream = new FileOutputStream(FILE_PATH,true);
     }
 
     @Override
@@ -25,7 +27,7 @@ public class OutputStreamMTWriter extends MTWriter
     {
         try
         {
-            PrintThePipe(outputStream);
+            PrintTheQueue(outputStream);
             outputStream.close();
         } catch (IOException e)
         {

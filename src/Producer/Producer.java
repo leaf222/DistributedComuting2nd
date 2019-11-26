@@ -2,6 +2,8 @@ package Producer;
 
 import java.io.IOException;
 import java.io.PipedOutputStream;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.CountDownLatch;
 
 /**
  * @program: DistributedComuting2nd
@@ -11,13 +13,17 @@ import java.io.PipedOutputStream;
  **/
 public class Producer extends Thread
 {
-    private PipedOutputStream pipedOutputStream = new PipedOutputStream();
+
+    private CountDownLatch countDownLatch = null;
+    private ConcurrentLinkedQueue<String> queue = null;
+
     private static int END_NUMBER = 1031168;//2014 * 512
     private static int TIMES_OF_ONE_NUMBER = 256;
 
-    public PipedOutputStream getPipedOutputStream()
+    public Producer(CountDownLatch c, ConcurrentLinkedQueue<String> q)
     {
-        return  pipedOutputStream;
+        this.countDownLatch = c;
+        this.queue = q;
     }
 
     @Override
@@ -25,28 +31,29 @@ public class Producer extends Thread
     {
         try
         {
-            writeToPipe();
+            writeToQueue();
         }catch (IOException e)
         {
             e.printStackTrace();
         }
     }
 
-    public void writeToPipe() throws IOException
+    public void writeToQueue() throws IOException
     {
-        for(int i = 1; i <= 20; i++)
+        for(int i = 1; i <= 1000; i++)
         {
-            writeNumberToPipe(i);
+            writeNumberToQueue(i);
         }
-        pipedOutputStream.close();
+        System.out.println("数据生成已完成");
+        countDownLatch.countDown();
     }
 
-    public void writeNumberToPipe(int num) throws IOException
+    public void writeNumberToQueue(int num) throws IOException
     {
         String s = String.valueOf(num);
         for(int i = 1; i <= TIMES_OF_ONE_NUMBER; i++)
         {
-            pipedOutputStream.write(s.getBytes());
+            queue.add(String.valueOf(num));
         }
     }
 }

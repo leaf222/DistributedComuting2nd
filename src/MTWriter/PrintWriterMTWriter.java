@@ -1,6 +1,8 @@
 package MTWriter;
 
 import java.io.*;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.CountDownLatch;
 
 /**
  * @program: DistributedComuting2nd
@@ -11,13 +13,13 @@ import java.io.*;
 public class PrintWriterMTWriter extends MTWriter
 {
     private PrintWriter printWriter = null;
-    private  static String FILE_PATH = "E:/Code/IntelJ/DistributedComuting2nd/PrintWriterIOLog.txt";
+    private  static String FILE_PATH = "E:/Code/PrintWriterIOLog.txt";
 
-    public PrintWriterMTWriter(PipedInputStream pipedInputStream) throws FileNotFoundException
+    public PrintWriterMTWriter(CountDownLatch c1, CountDownLatch c2, ConcurrentLinkedQueue<String> q) throws IOException
     {
-        super(pipedInputStream);
+        super(c1,c2,q);
         super.createFile(FILE_PATH);
-        printWriter = new PrintWriter(FILE_PATH);
+        printWriter = new PrintWriter(new FileWriter(FILE_PATH,true));
     }
 
     @Override
@@ -25,7 +27,7 @@ public class PrintWriterMTWriter extends MTWriter
     {
         try
         {
-            PrintThePipe();
+            PrintTheQueue();
         } catch (IOException e)
         {
             e.printStackTrace();
@@ -34,13 +36,28 @@ public class PrintWriterMTWriter extends MTWriter
         printWriter.close();
     }
 
-    public void PrintThePipe() throws IOException {
-        byte[] buf = new byte[1024];
-        int len = -1;
-        while ((len = super.getPipedInputStream().read(buf)) != -1)
+    public void PrintTheQueue() throws IOException
+    {
+        synchronized (queue)
         {
-            String s = new String(buf,0,len);
-            printWriter.write(new String(buf, 0 , len));
+            while (true)
+            {
+                if (!queue.isEmpty())
+                {
+                    try
+                    {
+                        printWriter.write(String.valueOf(queue.poll().getBytes("UTF-8")));
+                    } catch (IOException e)
+                    {
+                        e.printStackTrace();
+                    }
+                }
+                if(countDownLatchForStop.getCount() == 0 && queue.isEmpty())
+                {
+                    countDownLatchForTime.countDown();
+                    break;
+                }
+            }
         }
     }
 }

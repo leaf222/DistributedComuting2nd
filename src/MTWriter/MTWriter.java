@@ -3,6 +3,8 @@ package MTWriter;
 import Producer.Producer;
 
 import java.io.*;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.CountDownLatch;
 
 /**
  * @program: DistributedComuting2nd
@@ -12,16 +14,17 @@ import java.io.*;
  **/
 public abstract class MTWriter extends Thread
 {
-    private PipedInputStream pipedInputStream = null;
+    protected CountDownLatch countDownLatchForTime = null;
 
-    public MTWriter(PipedInputStream p)
-    {
-        pipedInputStream = p;
-    }
+    protected CountDownLatch countDownLatchForStop = null;
 
-    public PipedInputStream getPipedInputStream()
+    protected ConcurrentLinkedQueue<String> queue = null;
+
+    public MTWriter(CountDownLatch c1, CountDownLatch c2, ConcurrentLinkedQueue<String> q)
     {
-        return  pipedInputStream;
+        this.countDownLatchForTime = c1;
+        this.countDownLatchForStop = c2;
+        this.queue = q;
     }
 
     //检查文件是否存在，如不存在，则创建
@@ -40,21 +43,27 @@ public abstract class MTWriter extends Thread
         }
     }
 
-    public void PrintThePipe(OutputStream outputStream) throws IOException
+    public void PrintTheQueue(OutputStream outputStream) throws IOException
     {
-        byte[] buf = new byte[1024];
-        int len = -1;
-        while ((len = pipedInputStream.read(buf)) != -1)
-        {
-            try
-            {
-                String s = new String(buf,0,len);
-                outputStream.write(buf, 0, len);
-            }catch (IOException e)
-            {
-                e.printStackTrace();
-            }
-        }
-    }
 
+            while (true)
+            {
+                if (!queue.isEmpty())
+                {
+                    try
+                    {
+                        outputStream.write(queue.poll().getBytes("UTF-8"));
+                    } catch (IOException e)
+                    {
+                        e.printStackTrace();
+                    }
+                }
+                if(countDownLatchForStop.getCount() == 0 && queue.isEmpty())
+                {
+                    countDownLatchForTime.countDown();
+                    break;
+                }
+            }
+
+    }
 }
