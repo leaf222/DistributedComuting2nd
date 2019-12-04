@@ -40,7 +40,7 @@ public class Producer extends Thread
 
     public void writeToQueue() throws IOException
     {
-        for(int i = 1; i <= 1000; i++)
+        for(int i = 1; i <= 10000; i++)
         {
             writeNumberToQueue(i);
         }

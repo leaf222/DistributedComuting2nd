@@ -16,31 +16,32 @@ public class test
 
     public static void main(String[] args) throws IOException, InterruptedException
     {
-        long startTime = System.currentTimeMillis();
-
         ConcurrentLinkedQueue<String> queue = new ConcurrentLinkedQueue<String>();
 
-        int numOfThreads = 1;
+        int numOfThreads = 16;
 
         CountDownLatch countDownLatchForTime = new CountDownLatch(numOfThreads);
         CountDownLatch countDownLatchForStop = new CountDownLatch(1);
+
         Thread[] threads = new Thread[numOfThreads];
 
         Producer producer = new Producer(countDownLatchForStop, queue);
 
-
+        long startTime = System.currentTimeMillis();//计时开始
+        producer.start();
 
         for(int i = 0; i < numOfThreads; i++)
         {
-            OutputStreamMTWriter outputStreamMTWriter = new OutputStreamMTWriter(countDownLatchForTime,countDownLatchForStop, queue);
-            threads[i] = outputStreamMTWriter;
+            RandomAccessFileMTWriter rafMTWriter = new RandomAccessFileMTWriter(countDownLatchForTime,countDownLatchForStop,queue);
+            threads[i] = rafMTWriter;
             threads[i].start();
         }
 
-        producer.start();
-        countDownLatchForTime.await();
 
-        long endTime=System.currentTimeMillis();
+        countDownLatchForTime.await();//阻塞，所有线程结束才会结束
+
+        long endTime=System.currentTimeMillis();//计时结束
+
         System.out.println(endTime-startTime);
     }
 }

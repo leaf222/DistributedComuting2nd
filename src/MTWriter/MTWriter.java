@@ -45,7 +45,8 @@ public abstract class MTWriter extends Thread
 
     public void PrintTheQueue(OutputStream outputStream) throws IOException
     {
-
+        synchronized (queue)
+        {
             while (true)
             {
                 if (!queue.isEmpty())
@@ -58,12 +59,12 @@ public abstract class MTWriter extends Thread
                         e.printStackTrace();
                     }
                 }
-                if(countDownLatchForStop.getCount() == 0 && queue.isEmpty())
+                else
                 {
                     countDownLatchForTime.countDown();
                     break;
                 }
             }
-
+        }
     }
 }

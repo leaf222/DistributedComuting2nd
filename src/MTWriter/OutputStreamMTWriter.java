@@ -13,7 +13,7 @@ import java.util.concurrent.CountDownLatch;
 public class OutputStreamMTWriter extends MTWriter
 {
     private OutputStream outputStream = null;
-    private static String FILE_PATH = "E:/Code/OutputStreamIOLog.txt";
+    private static String FILE_PATH = "E:/Code/IntelJ/DistributedComuting2nd/OutputStreamIOLog";
 
     public OutputStreamMTWriter(CountDownLatch c1, CountDownLatch c2, ConcurrentLinkedQueue<String> q) throws FileNotFoundException
     {
