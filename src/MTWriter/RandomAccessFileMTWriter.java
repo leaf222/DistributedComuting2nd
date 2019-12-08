@@ -16,9 +16,9 @@ import java.util.concurrent.CountDownLatch;
 public class RandomAccessFileMTWriter extends MTWriter
 {
     private RandomAccessFile randomAccessFile = null;
-    private static String FILE_PATH = "E:/Code/IntelJ/DistributedComuting2nd/RandomAccessFileIOLog";
+    private static String FILE_PATH = "E:/Code/IntelJ/DistributedComuting2nd/RandomAccessFileIOLog.txt";
 
-    public RandomAccessFileMTWriter(CountDownLatch c1, CountDownLatch c2, ConcurrentLinkedQueue<String> q) throws FileNotFoundException
+    public RandomAccessFileMTWriter(CountDownLatch c1, CountDownLatch c2, ConcurrentLinkedQueue<byte[]> q) throws FileNotFoundException
     {
         super(c1, c2, q);
         super.createFile(FILE_PATH);
@@ -42,7 +42,7 @@ public class RandomAccessFileMTWriter extends MTWriter
                     try
                     {
                         randomAccessFile.seek(randomAccessFile.length());
-                        randomAccessFile.write(queue.poll().getBytes("UTF-8"));
+                        randomAccessFile.write(queue.poll());
                     } catch (IOException e)
                     {
                         e.printStackTrace();

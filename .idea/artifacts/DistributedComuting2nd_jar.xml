@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="DistributedComuting2nd:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/DistributedComuting2nd_jar</output-path>
+    <root id="archive" name="DistributedComuting2nd.jar">
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="E:/杂项/META-INF/MANIFEST.MF" />
+      </element>
+      <element id="module-output" name="DistributedComuting2nd" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../lib/hadoop-hdfs-2.7.7.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../lib/hadoop-mapreduce-client-core-2.7.7.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../lib/hadoop-common-2.7.7.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

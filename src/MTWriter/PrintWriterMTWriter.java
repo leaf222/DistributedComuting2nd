@@ -15,7 +15,7 @@ public class PrintWriterMTWriter extends MTWriter
     private PrintWriter printWriter = null;
     private  static String FILE_PATH = "E:/Code/PrintWriterIOLog.txt";
 
-    public PrintWriterMTWriter(CountDownLatch c1, CountDownLatch c2, ConcurrentLinkedQueue<String> q) throws IOException
+    public PrintWriterMTWriter(CountDownLatch c1, CountDownLatch c2, ConcurrentLinkedQueue<byte[]> q) throws IOException
     {
         super(c1,c2,q);
         super.createFile(FILE_PATH);
@@ -44,13 +44,7 @@ public class PrintWriterMTWriter extends MTWriter
             {
                 if (!queue.isEmpty())
                 {
-                    try
-                    {
-                        printWriter.write(String.valueOf(queue.poll().getBytes("UTF-8")));
-                    } catch (IOException e)
-                    {
-                        e.printStackTrace();
-                    }
+                    printWriter.write(String.valueOf(queue.poll()));
                 }
                 if(countDownLatchForStop.getCount() == 0 && queue.isEmpty())
                 {

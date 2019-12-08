@@ -13,14 +13,24 @@ import java.util.concurrent.CountDownLatch;
  **/
 public class Producer extends Thread
 {
-
     private CountDownLatch countDownLatch = null;
-    private ConcurrentLinkedQueue<String> queue = null;
+    private ConcurrentLinkedQueue<byte[]> queue = null;
 
     private static int END_NUMBER = 1031168;//2014 * 512
     private static int TIMES_OF_ONE_NUMBER = 256;
 
-    public Producer(CountDownLatch c, ConcurrentLinkedQueue<String> q)
+    //int转byte[]
+    public static byte[] intToByteArray(int a)
+    {
+        return new byte[]{
+                (byte) ((a >> 24) & 0xFF),
+                (byte) ((a >> 16) & 0xFF),
+                (byte) ((a >> 8) & 0xFF),
+                (byte) (a & 0xFF)
+        };
+    }
+
+    public Producer(CountDownLatch c, ConcurrentLinkedQueue<byte[]> q)
     {
         this.countDownLatch = c;
         this.queue = q;
@@ -50,10 +60,9 @@ public class Producer extends Thread
 
     public void writeNumberToQueue(int num) throws IOException
     {
-        String s = String.valueOf(num);
         for(int i = 1; i <= TIMES_OF_ONE_NUMBER; i++)
         {
-            queue.add(String.valueOf(num));
+            queue.add(intToByteArray(num));
         }
     }
 }

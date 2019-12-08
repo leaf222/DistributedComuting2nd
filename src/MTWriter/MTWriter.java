@@ -18,9 +18,9 @@ public abstract class MTWriter extends Thread
 
     protected CountDownLatch countDownLatchForStop = null;
 
-    protected ConcurrentLinkedQueue<String> queue = null;
+    protected ConcurrentLinkedQueue<byte[]> queue = null;
 
-    public MTWriter(CountDownLatch c1, CountDownLatch c2, ConcurrentLinkedQueue<String> q)
+    public MTWriter(CountDownLatch c1, CountDownLatch c2, ConcurrentLinkedQueue<byte[]> q)
     {
         this.countDownLatchForTime = c1;
         this.countDownLatchForStop = c2;
@@ -53,7 +53,7 @@ public abstract class MTWriter extends Thread
                 {
                     try
                     {
-                        outputStream.write(queue.poll().getBytes("UTF-8"));
+                        outputStream.write(queue.poll());
                     } catch (IOException e)
                     {
                         e.printStackTrace();
